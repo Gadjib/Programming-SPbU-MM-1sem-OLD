@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
 
 void swapp(int* a, int* b)
 {
@@ -7,17 +9,35 @@ void swapp(int* a, int* b)
 	*a = *a ^ *b;
 }
 
-// Реализация сортировки вставками
-void insertSort(int array[], int len)
+// Функция, которая печатает интовый массив
+void printIntArray(int array[], int len)
 {
     if (len == 0)
+    {
+        printf("{}\n");
+    }
+    else 
+    {
+        printf("{");
+        for (int i = 0; i < len - 1; i++)
+        {
+            printf("%d, ", array[i]);
+        }
+        printf("%d}\n", array[len - 1]);
+    }
+}
+
+// Реализация сортировки вставками
+void insertSort(int array[], int start, int end)
+{
+    if (start >= end)
     {
         return;
     }
     
     int element, location;
 
-    for (int i = 1; i < len; i++)
+    for (int i = start; i < end; i++)
     {
         element = array[i];
         location = i - 1;
@@ -48,7 +68,7 @@ int partition(int array[], int start, int end)
     }
     
     swapp (&array[index], &array[end]);
-
+    printIntArray(array, (end - start));
     return index;
 }
 
@@ -60,52 +80,55 @@ void quickSort(int array[], int start, int end)
         return;
     }
 
-    int pivot = partition(array, start, end);
-    quickSort(array, start, pivot - 1);
-    quickSort(array, pivot + 1, end);
-}
-
-// Функция, которая печатает интовый массив
-void printIntArray(int array[], int len)
-{
-    if (len == 0)
+    if (end - start < 10)
     {
-        printf("{}\n");
-    }
-    else 
-    {
-        printf("{");
-        for (int i = 0; i < len - 1; i++)
-        {
-            printf("%d, ", array[i]);
-        }
-        printf("%d}\n", array[len - 1]);
-    }
-}
-
-void mainSort(int array[], int len)
-{
-    if (len < 10)
-    {
-        insertSort(array, len);
+        insertSort(array, start, end);
+        printIntArray(array, end - start);
     }
     else
     {
-        quickSort(array, 0, len - 1);
+        int pivot = partition(array, start, end);
+        quickSort(array, start, pivot - 1);
+        quickSort(array, pivot + 1, end);
+        printIntArray(array, end - start);
     }
+}
+
+
+
+bool arraysEqual(int array1[], int array2[], int len)
+{
+    bool result = true;
+
+    for (int i = 0; i < len; i++)
+    {
+        if (! (array1[i] == array2 [i]))
+        {
+            result = false;
+        }
+    }
+
+    return result;
 }
 
 int main()
 {
-    int array1[] = {4,1,8,5};
+    int array1[] = {4, 1, 8, 5};
+    int array1Sorted[] = {1, 4, 5, 6};
+    
     int array2[] = {0};
+    int array2Sorted[] = {0};
+    
     int array3[] = {34, 2452, 143, 34, 134, 566, 3, 100, 1234, 1234, 34, 565, 544};
+    //int array3Sorted[] = {3, }
 
-    mainSort(array1, 4);
-    mainSort(array2, 1);
-    mainSort(array3, 13);
-
+    quickSort(array1, 0, 4);
+    quickSort(array2, 0, 1);
+    quickSort(array3, 0, 13);
+    
     printIntArray(array1, 4);
     printIntArray(array2, 1);
     printIntArray(array3, 13);
+
+    //if (!(arraysEqual(array1, {1, 4, 5, 8}, 4) && )
 }
